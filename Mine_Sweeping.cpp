@@ -13,145 +13,145 @@
 
 using namespace std;
 
-void initpick();//º¯ÊıinitgameÖĞĞèÒªµ÷ÓÃÔÚÆäÖ®ºóµÄº¯Êıinitpick ±ØĞëÔÚÆäÖ®Ç°ÏÈÉùÃ÷
-atomic<bool> timereset(true);//±£Ö¤²»Í¬¾ÖÓÎÏ·ÄÚÊ±¼ä¼ÆËã²»»¥ÏàÓ°Ïì
-bool mistake = false;//É¨µ½À×ÅĞ¶¨
+void initpick();//å‡½æ•°initgameä¸­éœ€è¦è°ƒç”¨åœ¨å…¶ä¹‹åçš„å‡½æ•°initpick å¿…é¡»åœ¨å…¶ä¹‹å‰å…ˆå£°æ˜
+atomic<bool> timereset(true);//ä¿è¯ä¸åŒå±€æ¸¸æˆå†…æ—¶é—´è®¡ç®—ä¸äº’ç›¸å½±å“
+bool mistake = false;//æ‰«åˆ°é›·åˆ¤å®š
 
 void sweep(TNT* sq, int rownum, int linenum, int &judgenum)
 {
 	if (!sq->ifsweep())return;
-	//Èô²»ĞèÒªÉ¨ÔòÌø¹ı
+	//è‹¥ä¸éœ€è¦æ‰«åˆ™è·³è¿‡
 	if (sq->ifbomb()) {
 		sq->putbomb();
 		mistake = true;
 		return;
 	}
-	//ÈôÎªÀ×ÔòÏÔÊ¾À× ·µ»Ø
+	//è‹¥ä¸ºé›·åˆ™æ˜¾ç¤ºé›· è¿”å›
 	else { 
 		sq->putnum(judgenum);
 	}
-	//ÏÔÊ¾ÖÜÎ§À×¸öÊı ±ê¼ÇÎªÒÑ´ò¿ª
+	//æ˜¾ç¤ºå‘¨å›´é›·ä¸ªæ•° æ ‡è®°ä¸ºå·²æ‰“å¼€
 	if (sq->bnum() == 0) {
 
 		if (sq->getxnum() == 0) {
-			sweep(sq + linenum, rownum, linenum, judgenum);//É¨ÓÒ·½À×
+			sweep(sq + linenum, rownum, linenum, judgenum);//æ‰«å³æ–¹é›·
 			if (sq->getynum() == 0) {
-				sweep(sq + 1, rownum, linenum, judgenum);//É¨ÏÂ·½
-				sweep(sq + linenum + 1, rownum, linenum, judgenum);//É¨ÓÒÏÂ
-			}//y=0,Í¬Ê±ÔÚµÚÒ»ĞĞ
+				sweep(sq + 1, rownum, linenum, judgenum);//æ‰«ä¸‹æ–¹
+				sweep(sq + linenum + 1, rownum, linenum, judgenum);//æ‰«å³ä¸‹
+			}//y=0,åŒæ—¶åœ¨ç¬¬ä¸€è¡Œ
 			else if (sq->getynum() == linenum-1) {
-				sweep(sq - 1, rownum, linenum, judgenum);//É¨ÉÏ·½
-				sweep(sq + linenum-1, rownum, linenum, judgenum);//É¨ÓÒÉÏ
-			}//y=0,Í¬Ê±ÔÚÄ©ĞĞ
+				sweep(sq - 1, rownum, linenum, judgenum);//æ‰«ä¸Šæ–¹
+				sweep(sq + linenum-1, rownum, linenum, judgenum);//æ‰«å³ä¸Š
+			}//y=0,åŒæ—¶åœ¨æœ«è¡Œ
 			else {
 				sweep(sq - 1, rownum, linenum, judgenum);
 				sweep(sq + linenum-1, rownum, linenum, judgenum);
 				sweep(sq + 1, rownum, linenum, judgenum);
 				sweep(sq + linenum+1, rownum, linenum, judgenum);
-			}//ÔÚÖĞ¼äĞĞÈ«É¨
+			}//åœ¨ä¸­é—´è¡Œå…¨æ‰«
 		}
-		//x=0,¼´¿Õ¸ñÔÚµÚÒ»ÁĞÊ±
+		//x=0,å³ç©ºæ ¼åœ¨ç¬¬ä¸€åˆ—æ—¶
 
 		else if (sq->getxnum() == rownum-1) {
-			sweep(sq - linenum, rownum, linenum, judgenum);//É¨×ó·½À×
+			sweep(sq - linenum, rownum, linenum, judgenum);//æ‰«å·¦æ–¹é›·
 			if (sq->getynum() == 0) {
-				sweep(sq - linenum+1, rownum, linenum, judgenum);//É¨×óÏÂ
-				sweep(sq + 1, rownum, linenum, judgenum);//É¨ÏÂ·½
-			}//y=0,Í¬Ê±ÔÚµÚÒ»ĞĞ
+				sweep(sq - linenum+1, rownum, linenum, judgenum);//æ‰«å·¦ä¸‹
+				sweep(sq + 1, rownum, linenum, judgenum);//æ‰«ä¸‹æ–¹
+			}//y=0,åŒæ—¶åœ¨ç¬¬ä¸€è¡Œ
 			else if (sq->getynum() == linenum-1) {
-				sweep(sq - linenum-1, rownum, linenum, judgenum);//É¨×óÉÏ
-				sweep(sq - 1, rownum, linenum, judgenum);//É¨ÉÏ·½
-			}//y=19,Í¬Ê±ÔÚÄ©ĞĞ
+				sweep(sq - linenum-1, rownum, linenum, judgenum);//æ‰«å·¦ä¸Š
+				sweep(sq - 1, rownum, linenum, judgenum);//æ‰«ä¸Šæ–¹
+			}//y=19,åŒæ—¶åœ¨æœ«è¡Œ
 			else {
 				sweep(sq - linenum-1, rownum, linenum, judgenum);
 				sweep(sq - linenum+1, rownum, linenum, judgenum);
 				sweep(sq - 1, rownum, linenum, judgenum);
 				sweep(sq + 1, rownum, linenum, judgenum);
-			}//ÔÚÖĞ¼äĞĞÈ«É¨
+			}//åœ¨ä¸­é—´è¡Œå…¨æ‰«
 		}
-		//x=29,¼´¿Õ¸ñÔÚÄ©ÁĞÊ±
+		//x=29,å³ç©ºæ ¼åœ¨æœ«åˆ—æ—¶
 
 		else {
 			if (sq->getynum() == 0) {
-				sweep(sq - linenum, rownum, linenum, judgenum);//É¨×ó·½
-				sweep(sq - linenum+1, rownum, linenum, judgenum);//É¨×óÏÂ
-				sweep(sq + 1, rownum, linenum, judgenum);//É¨ÏÂ·½
-				sweep(sq + linenum, rownum, linenum, judgenum);//É¨ÓÒ·½
-				sweep(sq + linenum+1, rownum, linenum, judgenum);//É¨ÓÒÏÂ
-			}//y=0,Í¬Ê±ÔÚµÚÒ»ĞĞÊ±
+				sweep(sq - linenum, rownum, linenum, judgenum);//æ‰«å·¦æ–¹
+				sweep(sq - linenum+1, rownum, linenum, judgenum);//æ‰«å·¦ä¸‹
+				sweep(sq + 1, rownum, linenum, judgenum);//æ‰«ä¸‹æ–¹
+				sweep(sq + linenum, rownum, linenum, judgenum);//æ‰«å³æ–¹
+				sweep(sq + linenum+1, rownum, linenum, judgenum);//æ‰«å³ä¸‹
+			}//y=0,åŒæ—¶åœ¨ç¬¬ä¸€è¡Œæ—¶
 			else if (sq->getynum() == linenum-1) {
-				sweep(sq - linenum-1, rownum, linenum, judgenum);//É¨×óÉÏ
-				sweep(sq - linenum, rownum, linenum, judgenum);//É¨×ó·½
-				sweep(sq - 1, rownum, linenum, judgenum);//É¨ÉÏ·½
-				sweep(sq + linenum-1, rownum, linenum, judgenum);//É¨ÓÒÉÏ
-				sweep(sq + linenum, rownum, linenum, judgenum);//É¨ÓÒ·½
-			}//y=19,Í¬Ê±ÔÚÄ©ĞĞÊ±
+				sweep(sq - linenum-1, rownum, linenum, judgenum);//æ‰«å·¦ä¸Š
+				sweep(sq - linenum, rownum, linenum, judgenum);//æ‰«å·¦æ–¹
+				sweep(sq - 1, rownum, linenum, judgenum);//æ‰«ä¸Šæ–¹
+				sweep(sq + linenum-1, rownum, linenum, judgenum);//æ‰«å³ä¸Š
+				sweep(sq + linenum, rownum, linenum, judgenum);//æ‰«å³æ–¹
+			}//y=19,åŒæ—¶åœ¨æœ«è¡Œæ—¶
 			else {
-				sweep(sq - linenum - 1, rownum, linenum, judgenum);//É¨×óÉÏ
-				sweep(sq - linenum, rownum, linenum, judgenum);//É¨×ó·½
-				sweep(sq - linenum + 1, rownum, linenum, judgenum);//É¨×óÏÂ
-				sweep(sq - 1, rownum, linenum, judgenum);//É¨ÉÏ·½
-				sweep(sq + 1, rownum, linenum, judgenum);//É¨ÏÂ·½
-				sweep(sq + linenum - 1, rownum, linenum, judgenum);//É¨ÓÒÉÏ
-				sweep(sq + linenum, rownum, linenum, judgenum);//É¨ÓÒ·½
-				sweep(sq + linenum + 1, rownum, linenum, judgenum);//É¨ÓÒÏÂ
-			}//ÖĞ¼äĞĞÖĞ¼äÁĞ
+				sweep(sq - linenum - 1, rownum, linenum, judgenum);//æ‰«å·¦ä¸Š
+				sweep(sq - linenum, rownum, linenum, judgenum);//æ‰«å·¦æ–¹
+				sweep(sq - linenum + 1, rownum, linenum, judgenum);//æ‰«å·¦ä¸‹
+				sweep(sq - 1, rownum, linenum, judgenum);//æ‰«ä¸Šæ–¹
+				sweep(sq + 1, rownum, linenum, judgenum);//æ‰«ä¸‹æ–¹
+				sweep(sq + linenum - 1, rownum, linenum, judgenum);//æ‰«å³ä¸Š
+				sweep(sq + linenum, rownum, linenum, judgenum);//æ‰«å³æ–¹
+				sweep(sq + linenum + 1, rownum, linenum, judgenum);//æ‰«å³ä¸‹
+			}//ä¸­é—´è¡Œä¸­é—´åˆ—
 		}
-		//0<x<29,ÔÚÖĞ¼äÁĞÊ±
+		//0<x<29,åœ¨ä¸­é—´åˆ—æ—¶
 
 	}
-	//ÈôÀ×¸öÊıÎª0Ôòµİ¹éÉ¨À×
+	//è‹¥é›·ä¸ªæ•°ä¸º0åˆ™é€’å½’æ‰«é›·
 };
-//×ó¼üµ¥»÷É¨µ¥Ò»À×  && É¨µ½¿Õ¸ñµİ¹éÉ¨ÖÜÎ§¾Å¹¬¸ñ
+//å·¦é”®å•å‡»æ‰«å•ä¸€é›·  && æ‰«åˆ°ç©ºæ ¼é€’å½’æ‰«å‘¨å›´ä¹å®«æ ¼
 
 void KAI(TNT* sq,int rownum, int linenum,int &judgenum) {
-	int n = 0;//¸öÊıÖÃ0 Í³¼Æ¾Å¹¬¸ñÄÚÒÑ±ê¼ÇÀ×¸öÊı
+	int n = 0;//ä¸ªæ•°ç½®0 ç»Ÿè®¡ä¹å®«æ ¼å†…å·²æ ‡è®°é›·ä¸ªæ•°
 	if (sq->getxnum() == 0) {
 
-		if ((sq + linenum)->ifflag())n++;//ÅĞ¶ÏÓÒ·½ÊÇ·ñ±ê¼Ç
+		if ((sq + linenum)->ifflag())n++;//åˆ¤æ–­å³æ–¹æ˜¯å¦æ ‡è®°
 
 		if (sq->getynum() == 0) {
 
-			if ((sq + 1)->ifflag())n++;//ÅĞ¶ÏÏÂ·½
-			if ((sq + linenum+1)->ifflag())n++;//ÅĞ¶ÏÓÒÏÂ
+			if ((sq + 1)->ifflag())n++;//åˆ¤æ–­ä¸‹æ–¹
+			if ((sq + linenum+1)->ifflag())n++;//åˆ¤æ–­å³ä¸‹
 
 			if (n == sq->bnum()) {
 				if ((sq + linenum)->ifsweep())sweep(sq + linenum, rownum, linenum, judgenum);
 				if ((sq + 1)->ifsweep())sweep(sq + 1, rownum, linenum, judgenum);
 				if ((sq + linenum+1)->ifsweep())sweep(sq + linenum+1, rownum, linenum, judgenum);
-			}//Èç¹û±ê¼ÇÀ×ÊıÄ¿ÕıÈ·ÔòÉ¨ ÓÒ·½¡¢ÏÂ·½¡¢ÓÒÏÂ
+			}//å¦‚æœæ ‡è®°é›·æ•°ç›®æ­£ç¡®åˆ™æ‰« å³æ–¹ã€ä¸‹æ–¹ã€å³ä¸‹
 
 			else {
 				for (int i = 2; i > 0; i--) {
 
 					setlinecolor(red);
 					arc(sq->getxloc() + 1, sq->getyloc() + 1, sq->getxloc() + 29, sq->getyloc() + 29, 0, 2 * pi);
-					//ºìÉ«¾¯Ê¾
+					//çº¢è‰²è­¦ç¤º
 
 					this_thread::sleep_for(chrono::milliseconds(400));
-					//É«²ÊÍ£Áô ´ïµ½ÉÁË¸Ğ§¹û
+					//è‰²å½©åœç•™ è¾¾åˆ°é—ªçƒæ•ˆæœ
 
 					setlinecolor(white);
 					arc(sq->getxloc() + 1, sq->getyloc() + 1, sq->getxloc() + 29, sq->getyloc() + 29, 0, 2 * pi);
 					setlinecolor(gray4);
 					arc(sq->getxloc() + 1, sq->getyloc() + 1, sq->getxloc() + 29, sq->getyloc() + 29, -0.75 * pi, 0.25 * pi);
-					//¿¹¾â³İ
+					//æŠ—é”¯é½¿
 
 					this_thread::sleep_for(chrono::milliseconds(200));
 
 				}
-			}//²»Âú×ãÉ¨À×Ìõ¼ş ÖÜ±ßºìÉ«¾¯Ê¾
+			}//ä¸æ»¡è¶³æ‰«é›·æ¡ä»¶ å‘¨è¾¹çº¢è‰²è­¦ç¤º
 
-		}//Í¬Ê±ÔÚµÚÒ»ĞĞÊ±
+		}//åŒæ—¶åœ¨ç¬¬ä¸€è¡Œæ—¶
 
 		else if (sq->getynum() == linenum-1) {
-			if ((sq - 1)->ifflag())n++;//ÅĞ¶ÏÉÏ·½
-			if ((sq + linenum-1)->ifflag())n++;//ÅĞ¶ÏÓÒÉÏ
+			if ((sq - 1)->ifflag())n++;//åˆ¤æ–­ä¸Šæ–¹
+			if ((sq + linenum-1)->ifflag())n++;//åˆ¤æ–­å³ä¸Š
 			if (n == sq->bnum()) {
 				if ((sq + linenum)->ifsweep())sweep(sq + linenum, rownum, linenum, judgenum);
 				if ((sq - 1)->ifsweep())sweep(sq - 1, rownum, linenum, judgenum);
 				if ((sq + linenum-1)->ifsweep())sweep(sq + linenum-1, rownum, linenum, judgenum);
-			}//Èç¹û±ê¼ÇÀ×ÊıÄ¿ÕıÈ·ÔòÉ¨ ÓÒ·½¡¢ÉÏ·½¡¢ÓÒÉÏ
+			}//å¦‚æœæ ‡è®°é›·æ•°ç›®æ­£ç¡®åˆ™æ‰« å³æ–¹ã€ä¸Šæ–¹ã€å³ä¸Š
 			else {
 				for (int i = 2; i > 0; i--) {
 					setlinecolor(red);
@@ -164,20 +164,20 @@ void KAI(TNT* sq,int rownum, int linenum,int &judgenum) {
 					this_thread::sleep_for(chrono::milliseconds(200));
 				}
 			}
-		}//Í¬Ê±ÔÚÄ©ĞĞ
+		}//åŒæ—¶åœ¨æœ«è¡Œ
 
 		else {
-			if ((sq - 1)->ifflag())n++;//ÅĞ¶ÏÉÏ·½
-			if ((sq + linenum-1)->ifflag())n++;//ÅĞ¶ÏÓÒÉÏ
-			if ((sq + 1)->ifflag())n++;//ÅĞ¶ÏÏÂ·½
-			if ((sq + linenum+1)->ifflag())n++;//ÅĞ¶ÏÓÒÏÂ
+			if ((sq - 1)->ifflag())n++;//åˆ¤æ–­ä¸Šæ–¹
+			if ((sq + linenum-1)->ifflag())n++;//åˆ¤æ–­å³ä¸Š
+			if ((sq + 1)->ifflag())n++;//åˆ¤æ–­ä¸‹æ–¹
+			if ((sq + linenum+1)->ifflag())n++;//åˆ¤æ–­å³ä¸‹
 			if (n == sq->bnum()) {
 				if ((sq + linenum)->ifsweep())sweep(sq + linenum, rownum, linenum, judgenum);
 				if ((sq - 1)->ifsweep())sweep(sq - 1, rownum, linenum, judgenum);
 				if ((sq + linenum-1)->ifsweep())sweep(sq + linenum-1, rownum, linenum, judgenum);
 				if ((sq + 1)->ifsweep())sweep(sq + 1, rownum, linenum, judgenum);
 				if ((sq + linenum+1)->ifsweep())sweep(sq + linenum+1, rownum, linenum, judgenum);
-			}//Èç¹û±ê¼ÇÀ×ÊıÄ¿ÕıÈ·ÔòÉ¨ ÓÒ·½¡¢ÉÏ·½¡¢ÓÒÉÏ¡¢ÏÂ·½¡¢ÓÒÏÂ
+			}//å¦‚æœæ ‡è®°é›·æ•°ç›®æ­£ç¡®åˆ™æ‰« å³æ–¹ã€ä¸Šæ–¹ã€å³ä¸Šã€ä¸‹æ–¹ã€å³ä¸‹
 			else {
 				for (int i = 2; i > 0; i--) {
 					setlinecolor(red);
@@ -190,21 +190,21 @@ void KAI(TNT* sq,int rownum, int linenum,int &judgenum) {
 					this_thread::sleep_for(chrono::milliseconds(200));
 				}
 			}
-		}//ÔÚÖĞ¼äĞĞ
+		}//åœ¨ä¸­é—´è¡Œ
 
 	}
-	//ÖĞĞÄ¿éÔÚµÚÒ»ÁĞÊ±
+	//ä¸­å¿ƒå—åœ¨ç¬¬ä¸€åˆ—æ—¶
 	else if (sq->getxnum() == rownum-1) {
-		if ((sq - linenum)->ifflag())n++;//ÅĞ¶Ï×ó·½
+		if ((sq - linenum)->ifflag())n++;//åˆ¤æ–­å·¦æ–¹
 
 		if (sq->getynum() == 0) {
-			if ((sq - linenum+1)->ifflag())n++;//ÅĞ¶Ï×óÏÂ
-			if ((sq + 1)->ifflag())n++;//ÅĞ¶ÏÏÂ·½
+			if ((sq - linenum+1)->ifflag())n++;//åˆ¤æ–­å·¦ä¸‹
+			if ((sq + 1)->ifflag())n++;//åˆ¤æ–­ä¸‹æ–¹
 			if (n == sq->bnum()) {
 				if ((sq - linenum)->ifsweep())sweep(sq - linenum, rownum, linenum, judgenum);
 				if ((sq - linenum+1)->ifsweep())sweep(sq - linenum+1, rownum, linenum, judgenum);
 				if ((sq + 1)->ifsweep())sweep(sq + 1, rownum, linenum, judgenum);
-			}//Èç¹ûÕıÈ· É¨×ó·½¡¢×óÏÂ¡¢ÏÂ·½
+			}//å¦‚æœæ­£ç¡® æ‰«å·¦æ–¹ã€å·¦ä¸‹ã€ä¸‹æ–¹
 			else {
 				for (int i = 2; i > 0; i--) {
 					setlinecolor(red);
@@ -217,16 +217,16 @@ void KAI(TNT* sq,int rownum, int linenum,int &judgenum) {
 					this_thread::sleep_for(chrono::milliseconds(200));
 				}
 			}
-		}//Í¬Ê±ÔÚµÚÒ»ĞĞ
+		}//åŒæ—¶åœ¨ç¬¬ä¸€è¡Œ
 
 		else if (sq->getynum() == linenum-1) {
-			if ((sq - linenum-1)->ifflag())n++;//ÅĞ¶Ï×óÉÏ
-			if ((sq - 1)->ifflag())n++;//ÅĞ¶ÏÉÏ·½
+			if ((sq - linenum-1)->ifflag())n++;//åˆ¤æ–­å·¦ä¸Š
+			if ((sq - 1)->ifflag())n++;//åˆ¤æ–­ä¸Šæ–¹
 			if (n == sq->bnum()) {
 				if ((sq - linenum)->ifsweep())sweep(sq - linenum, rownum, linenum, judgenum);
 				if ((sq - linenum-1)->ifsweep())sweep(sq - linenum-1, rownum, linenum, judgenum);
 				if ((sq - 1)->ifsweep())sweep(sq - 1, rownum, linenum, judgenum);
-			}//É¨ ×ó·½¡¢×óÉÏ¡¢ÉÏ·½
+			}//æ‰« å·¦æ–¹ã€å·¦ä¸Šã€ä¸Šæ–¹
 			else {
 				for (int i = 2; i > 0; i--) {
 					setlinecolor(red);
@@ -239,20 +239,20 @@ void KAI(TNT* sq,int rownum, int linenum,int &judgenum) {
 					this_thread::sleep_for(chrono::milliseconds(200));
 				}
 			}
-		}//Í¬Ê±ÔÚÄ©ĞĞ
+		}//åŒæ—¶åœ¨æœ«è¡Œ
 
 		else {
-			if ((sq - linenum-1)->ifflag())n++;//ÅĞ¶Ï×óÉÏ
-			if ((sq - 1)->ifflag())n++;//ÅĞ¶ÏÉÏ·½
-			if ((sq - linenum+1)->ifflag())n++;//ÅĞ¶Ï×óÏÂ
-			if ((sq + 1)->ifflag())n++;//ÅĞ¶ÏÏÂ·½
+			if ((sq - linenum-1)->ifflag())n++;//åˆ¤æ–­å·¦ä¸Š
+			if ((sq - 1)->ifflag())n++;//åˆ¤æ–­ä¸Šæ–¹
+			if ((sq - linenum+1)->ifflag())n++;//åˆ¤æ–­å·¦ä¸‹
+			if ((sq + 1)->ifflag())n++;//åˆ¤æ–­ä¸‹æ–¹
 			if (n == sq->bnum()) {
 				if ((sq - linenum)->ifsweep())sweep(sq - linenum, rownum, linenum, judgenum);
 				if ((sq - linenum-1)->ifsweep())sweep(sq - linenum-1, rownum, linenum, judgenum);
 				if ((sq - 1)->ifsweep())sweep(sq - 1, rownum, linenum, judgenum);
 				if ((sq - linenum+1)->ifsweep())sweep(sq - linenum+1, rownum, linenum, judgenum);
 				if ((sq + 1)->ifsweep())sweep(sq + 1, rownum, linenum, judgenum);
-			}//ÔÚÖĞ¼äĞĞ É¨×ó·½¡¢×óÉÏ¡¢ÉÏ·½¡¢×óÏÂ¡¢ÏÂ·½
+			}//åœ¨ä¸­é—´è¡Œ æ‰«å·¦æ–¹ã€å·¦ä¸Šã€ä¸Šæ–¹ã€å·¦ä¸‹ã€ä¸‹æ–¹
 			else {
 				for (int i = 2; i > 0; i--) {
 					setlinecolor(red);
@@ -265,17 +265,17 @@ void KAI(TNT* sq,int rownum, int linenum,int &judgenum) {
 					this_thread::sleep_for(chrono::milliseconds(200));
 				}
 			}
-		}//ÔÚÖĞ¼äĞĞ
+		}//åœ¨ä¸­é—´è¡Œ
 
 	}
-	//ÖĞĞÄ¿éÔÚÄ©ÁĞÊ±
+	//ä¸­å¿ƒå—åœ¨æœ«åˆ—æ—¶
 	else {
 		if (sq->getynum() == 0) {
-			if ((sq - linenum)->ifflag())n++;//×ó·½
-			if ((sq - linenum+1)->ifflag())n++;//×óÏÂ
-			if ((sq + 1)->ifflag())n++;//ÏÂ·½
-			if ((sq + linenum)->ifflag())n++;//ÓÒ·½
-			if ((sq + linenum+1)->ifflag())n++;//ÓÒÏÂ
+			if ((sq - linenum)->ifflag())n++;//å·¦æ–¹
+			if ((sq - linenum+1)->ifflag())n++;//å·¦ä¸‹
+			if ((sq + 1)->ifflag())n++;//ä¸‹æ–¹
+			if ((sq + linenum)->ifflag())n++;//å³æ–¹
+			if ((sq + linenum+1)->ifflag())n++;//å³ä¸‹
 			if (n == sq->bnum()) {
 				if ((sq - linenum)->ifsweep())sweep(sq - linenum, rownum, linenum, judgenum);
 				if ((sq - linenum+1)->ifsweep())sweep(sq - linenum+1, rownum, linenum, judgenum);
@@ -295,14 +295,14 @@ void KAI(TNT* sq,int rownum, int linenum,int &judgenum) {
 					this_thread::sleep_for(chrono::milliseconds(200));
 				}
 			}
-		}//Í¬Ê±ÔÚÊ×ĞĞ
+		}//åŒæ—¶åœ¨é¦–è¡Œ
 
 		else if (sq->getynum() == linenum-1) {
-			if ((sq - linenum-1)->ifflag())n++;//×óÉÏ
-			if ((sq - linenum)->ifflag())n++;//×ó·½
-			if ((sq - 1)->ifflag())n++;//ÉÏ·½
-			if ((sq + linenum-1)->ifflag())n++;//ÓÒÉÏ
-			if ((sq + linenum)->ifflag())n++;//ÓÒ·½
+			if ((sq - linenum-1)->ifflag())n++;//å·¦ä¸Š
+			if ((sq - linenum)->ifflag())n++;//å·¦æ–¹
+			if ((sq - 1)->ifflag())n++;//ä¸Šæ–¹
+			if ((sq + linenum-1)->ifflag())n++;//å³ä¸Š
+			if ((sq + linenum)->ifflag())n++;//å³æ–¹
 			if (n == sq->bnum()) {
 				if ((sq - linenum-1)->ifsweep())sweep(sq - linenum-1, rownum, linenum, judgenum);
 				if ((sq - linenum)->ifsweep())sweep(sq - linenum, rownum, linenum, judgenum);
@@ -322,17 +322,17 @@ void KAI(TNT* sq,int rownum, int linenum,int &judgenum) {
 					this_thread::sleep_for(chrono::milliseconds(200));
 				}
 			}
-		}//Í¬Ê±ÔÚÄ©ĞĞ
+		}//åŒæ—¶åœ¨æœ«è¡Œ
 
 		else {
-			if ((sq - linenum-1)->ifflag())n++;//×óÉÏ
-			if ((sq - linenum)->ifflag())n++;//×ó·½
-			if ((sq - linenum+1)->ifflag())n++;//×óÏÂ
-			if ((sq - 1)->ifflag())n++;//ÉÏ·½
-			if ((sq + 1)->ifflag())n++;//ÏÂ·½
-			if ((sq + linenum-1)->ifflag())n++;//ÓÒÉÏ
-			if ((sq + linenum)->ifflag())n++;//ÓÒ·½
-			if ((sq + linenum+1)->ifflag())n++;//ÓÒÏÂ
+			if ((sq - linenum-1)->ifflag())n++;//å·¦ä¸Š
+			if ((sq - linenum)->ifflag())n++;//å·¦æ–¹
+			if ((sq - linenum+1)->ifflag())n++;//å·¦ä¸‹
+			if ((sq - 1)->ifflag())n++;//ä¸Šæ–¹
+			if ((sq + 1)->ifflag())n++;//ä¸‹æ–¹
+			if ((sq + linenum-1)->ifflag())n++;//å³ä¸Š
+			if ((sq + linenum)->ifflag())n++;//å³æ–¹
+			if ((sq + linenum+1)->ifflag())n++;//å³ä¸‹
 			if (n == sq->bnum()) {
 				if ((sq - linenum-1)->ifsweep())sweep(sq - linenum-1, rownum, linenum, judgenum);
 				if ((sq - linenum)->ifsweep())sweep(sq - linenum, rownum, linenum, judgenum);
@@ -355,22 +355,22 @@ void KAI(TNT* sq,int rownum, int linenum,int &judgenum) {
 					this_thread::sleep_for(chrono::milliseconds(200));
 				}
 			}
-		}//ÔÚÖĞ¼äĞĞ
+		}//åœ¨ä¸­é—´è¡Œ
 
 	}
-	//ÔÚÖĞ¼äÁĞÊ±
+	//åœ¨ä¸­é—´åˆ—æ—¶
 }
-//×ó¼üË«»÷É¨¾Å¹¬¸ñ
+//å·¦é”®åŒå‡»æ‰«ä¹å®«æ ¼
 
 void puttime(chrono::high_resolution_clock::time_point st,int bklen,int origin) {
-	//¸øº¯Êı´«Èë³ÌĞò¿ªÊ¼Ê±Ê±¼ä´Á
+	//ç»™å‡½æ•°ä¼ å…¥ç¨‹åºå¼€å§‹æ—¶æ—¶é—´æˆ³
 	while (timereset) {
 		chrono::high_resolution_clock::time_point current = chrono::high_resolution_clock::now();
-		//»ñµÃµ±Ê±Ê±¼ä´Á ÀàĞÍÎªchronoÃüÃû¿Õ¼äÖĞµÄ¡¤¡¤¡¤¡¤¡¤¡¤
+		//è·å¾—å½“æ—¶æ—¶é—´æˆ³ ç±»å‹ä¸ºchronoå‘½åç©ºé—´ä¸­çš„Â·Â·Â·Â·Â·Â·
 		chrono::seconds duration = chrono::duration_cast<chrono::seconds>(current - st);
-		//½«Á½¸öÊ±¼ä´Á²îÖµ×ª»¯ÎªÃë ÀàĞÍÎªchronoÃüÃû¿Õ¼äÖĞµÄseconds
+		//å°†ä¸¤ä¸ªæ—¶é—´æˆ³å·®å€¼è½¬åŒ–ä¸ºç§’ ç±»å‹ä¸ºchronoå‘½åç©ºé—´ä¸­çš„seconds
 		int sec = duration.count();
-		//½«secondsÀàĞÍ×ª»¯Îªint
+		//å°†secondsç±»å‹è½¬åŒ–ä¸ºint
 		settextcolor(red);
 		setbkmode(OPAQUE);
 		setbkcolor(black);
@@ -386,19 +386,19 @@ void puttime(chrono::high_resolution_clock::time_point st,int bklen,int origin) 
 			sprintf_s(buffer, _T("%d"), sec);
 		outtextxy(bklen-130, 15-origin, buffer);
 		this_thread::sleep_for(chrono::milliseconds(500));
-		//ÉèÖÃÏß³ÌĞİÃßÊ±¼ä¼ä¸ô
+		//è®¾ç½®çº¿ç¨‹ä¼‘çœ æ—¶é—´é—´éš”
 	}
 	timereset = true;
 }
-//¼ÆÊ±Æ÷
+//è®¡æ—¶å™¨
 
 void initgame(int choice) {
 	
 	int bklen = 270;
 	int bkwid = 270;
 	int origin = 75;
-	int rownum = 9;//´Ë´¦Ö¸ÁĞ(´ò´íÁË)
-	int linenum = 9;//ĞĞ
+	int rownum = 9;//æ­¤å¤„æŒ‡åˆ—(æ‰“é”™äº†)
+	int linenum = 9;//è¡Œ
 	int bombnum = 10;
 	int judgenum = 81;
 	if (choice == 3) {
@@ -428,7 +428,7 @@ void initgame(int choice) {
 		bombnum = 10;
 		judgenum = rownum * linenum;
 	}
-	//¹æÄ£Ñ¡Ôñ
+	//è§„æ¨¡é€‰æ‹©
 
 	initgraph(bklen, bkwid+origin, EX_DBLCLKS);
 	setorigin(0, origin);
@@ -452,14 +452,14 @@ void initgame(int choice) {
 			arc(i * 30 + 1, j * 30 + 1, i * 30 + 29, j * 30 + 29, -0.75 * pi, 0.25 * pi);
 		}
 	}
-	//´´½¨±³¾°
+	//åˆ›å»ºèƒŒæ™¯
 
-	/*ÉèÖÃÃ¿¿éµØµÄ×ø±ê
-	x:ºá×ø±ê£¬±íÊ¾ÁĞÊı£¬0~rownum£¬´¢´æÓÚÒ»Î¬i
-	y:×İ×ø±ê£¬±íÊ¾ĞĞÊı£¬0~linenum£¬´¢´æÓÚ¶şÎ¬j*/
-	TNT* sq = new TNT[rownum * linenum];//²»¶¨³£Á¿¶şÎ¬Êı×é ¿ÉÓÃ¶¯Ì¬Êı×éÉùÃ÷ ÓÃ³Ë»ıĞÎÊ½Ò»Î¬Êı×éÄ£Äâ¶şÎ¬Êı×é
-	for (int j = 0; j < linenum; j++) {//y·¶Î§
-		for (int i = 0; i < rownum; i++) {//x·¶Î§
+	/*è®¾ç½®æ¯å—åœ°çš„åæ ‡
+	x:æ¨ªåæ ‡ï¼Œè¡¨ç¤ºåˆ—æ•°ï¼Œ0~rownumï¼Œå‚¨å­˜äºä¸€ç»´i
+	y:çºµåæ ‡ï¼Œè¡¨ç¤ºè¡Œæ•°ï¼Œ0~linenumï¼Œå‚¨å­˜äºäºŒç»´j*/
+	TNT* sq = new TNT[rownum * linenum];//ä¸å®šå¸¸é‡äºŒç»´æ•°ç»„ å¯ç”¨åŠ¨æ€æ•°ç»„å£°æ˜ ç”¨ä¹˜ç§¯å½¢å¼ä¸€ç»´æ•°ç»„æ¨¡æ‹ŸäºŒç»´æ•°ç»„
+	for (int j = 0; j < linenum; j++) {//yèŒƒå›´
+		for (int i = 0; i < rownum; i++) {//xèŒƒå›´
 			sq[i * linenum + j].setloc(i, j);
 		}
 	}
@@ -468,7 +468,7 @@ void initgame(int choice) {
 	default_random_engine generator(rd());
 	uniform_int_distribution<int>kai1(0, rownum-1);
 	uniform_int_distribution<int>kai2(0, linenum-1);
-	//Ëæ»úÊıÉú³ÉÆ÷
+	//éšæœºæ•°ç”Ÿæˆå™¨
 
 	int* temp = new int[bombnum];
 	for (int n = 0; n < bombnum; n++) {
@@ -485,7 +485,7 @@ void initgame(int choice) {
 		}
 		if (flag)sq[i * linenum + j].bchange();
 	}
-	//Éú³ÉËæ»úÀ×²¢Âñ²Ø
+	//ç”Ÿæˆéšæœºé›·å¹¶åŸ‹è—
 
 	for (int i = 0; i < rownum; i++) {
 		for (int j = 0; j < linenum; j++) {
@@ -498,39 +498,39 @@ void initgame(int choice) {
 					if (sq[i * linenum + j + 1].ifbomb())sq[i * linenum + j].bplus();
 					if (sq[(i + 1) * linenum + j].ifbomb())sq[i * linenum + j].bplus();
 					if (sq[(i + 1) * linenum + j + 1].ifbomb())sq[i * linenum + j].bplus();
-				}//Ê×ÁĞÊ×ĞĞ
+				}//é¦–åˆ—é¦–è¡Œ
 				else if (j == linenum-1) {
 					if (sq[i * linenum + j - 1].ifbomb())sq[i * linenum + j].bplus();
 					if (sq[(i + 1) * linenum + j - 1].ifbomb())sq[i * linenum + j].bplus();
 					if (sq[(i + 1) * linenum + j].ifbomb())sq[i * linenum + j].bplus();
-				}//Ê×ÁĞÄ©ĞĞ
+				}//é¦–åˆ—æœ«è¡Œ
 				else {
 					if (sq[i * linenum + j - 1].ifbomb())sq[i * linenum + j].bplus();
 					if (sq[i * linenum + j + 1].ifbomb())sq[i * linenum + j].bplus();
 					if (sq[(i + 1) * linenum + j - 1].ifbomb())sq[i * linenum + j].bplus();
 					if (sq[(i + 1) * linenum + j].ifbomb())sq[i * linenum + j].bplus();
 					if (sq[(i + 1) * linenum + j + 1].ifbomb())sq[i * linenum + j].bplus();
-				}//Ê×ÁĞÖĞ¼äĞĞ
-			}//Ê×ÁĞ
+				}//é¦–åˆ—ä¸­é—´è¡Œ
+			}//é¦–åˆ—
 			else if (i == rownum-1) {
 				if (j == 0) {
 					if (sq[(i - 1) * linenum + j].ifbomb())sq[i * linenum + j].bplus();
 					if (sq[(i - 1) * linenum + j + 1].ifbomb())sq[i * linenum + j].bplus();
 					if (sq[i * linenum + j + 1].ifbomb())sq[i * linenum + j].bplus();
-				}//Ä©ÁĞÊ×ĞĞ
+				}//æœ«åˆ—é¦–è¡Œ
 				else if (j == linenum-1) {
 					if (sq[(i - 1) * linenum + j - 1].ifbomb())sq[i * linenum + j].bplus();
 					if (sq[(i - 1) * linenum + j].ifbomb())sq[i * linenum + j].bplus();
 					if (sq[i * linenum + j - 1].ifbomb())sq[i * linenum + j].bplus();
-				}//Ä©ÁĞÄ©ĞĞ
+				}//æœ«åˆ—æœ«è¡Œ
 				else {
 					if (sq[(i - 1) * linenum + j - 1].ifbomb())sq[i * linenum + j].bplus();
 					if (sq[(i - 1) * linenum + j].ifbomb())sq[i * linenum + j].bplus();
 					if (sq[(i - 1) * linenum + j + 1].ifbomb())sq[i * linenum + j].bplus();
 					if (sq[i * linenum + j - 1].ifbomb())sq[i * linenum + j].bplus();
 					if (sq[i * linenum + j + 1].ifbomb())sq[i * linenum + j].bplus();
-				}//Ä©ÁĞÖĞ¼äĞĞ
-			}//Ä©ÁĞ
+				}//æœ«åˆ—ä¸­é—´è¡Œ
+			}//æœ«åˆ—
 			else {
 				if (j == 0) {
 					if (sq[(i - 1) * linenum + j].ifbomb())sq[i * linenum + j].bplus();
@@ -538,14 +538,14 @@ void initgame(int choice) {
 					if (sq[i * linenum + j + 1].ifbomb())sq[i * linenum + j].bplus();
 					if (sq[(i + 1) * linenum + j].ifbomb())sq[i * linenum + j].bplus();
 					if (sq[(i + 1) * linenum + j + 1].ifbomb())sq[i * linenum + j].bplus();
-				}//ÖĞ¼äÁĞÊ×ĞĞ
+				}//ä¸­é—´åˆ—é¦–è¡Œ
 				else if (j == linenum-1) {
 					if (sq[(i - 1) * linenum + j - 1].ifbomb())sq[i * linenum + j].bplus();
 					if (sq[(i - 1) * linenum + j].ifbomb())sq[i * linenum + j].bplus();
 					if (sq[i * linenum + j - 1].ifbomb())sq[i * linenum + j].bplus();
 					if (sq[(i + 1) * linenum + j - 1].ifbomb())sq[i * linenum + j].bplus();
 					if (sq[(i + 1) * linenum + j].ifbomb())sq[i * linenum + j].bplus();
-				}//ÖĞ¼äÁĞÄ©ĞĞ
+				}//ä¸­é—´åˆ—æœ«è¡Œ
 				else {
 					if (sq[(i - 1) * linenum + j - 1].ifbomb())sq[i * linenum + j].bplus();
 					if (sq[(i - 1) * linenum + j].ifbomb())sq[i * linenum + j].bplus();
@@ -555,11 +555,11 @@ void initgame(int choice) {
 					if (sq[(i + 1) * linenum + j - 1].ifbomb())sq[i * linenum + j].bplus();
 					if (sq[(i + 1) * linenum + j].ifbomb())sq[i * linenum + j].bplus();
 					if (sq[(i + 1) * linenum + j + 1].ifbomb())sq[i * linenum + j].bplus();
-				}//ÖĞ¼äÁĞÖĞ¼äĞĞ
-			}//ÖĞ¼äÁĞ
+				}//ä¸­é—´åˆ—ä¸­é—´è¡Œ
+			}//ä¸­é—´åˆ—
 		}
 	}
-	//ÖÜÎ§À×¸öÊı
+	//å‘¨å›´é›·ä¸ªæ•°
 
 	while (int first = 1) {
 		int i = kai1(generator);
@@ -570,23 +570,23 @@ void initgame(int choice) {
 			break;
 		}
 	}
-	//Ëæ»ú³éÈ¡ÎŞÀ×·½¿é ±£Ö¤Ê×´Î´ò¿ª·½¿é¾Å¹¬¸ñÄÚÎŞÀ×
+	//éšæœºæŠ½å–æ— é›·æ–¹å— ä¿è¯é¦–æ¬¡æ‰“å¼€æ–¹å—ä¹å®«æ ¼å†…æ— é›·
 
-	COLORREF bkclr = getpixel(5, 5);//»ñÈ¡µãÑÕÉ«
+	COLORREF bkclr = getpixel(5, 5);//è·å–ç‚¹é¢œè‰²
 	setbkmode(OPAQUE);
 	setbkcolor(black);
 	settextcolor(red);
-	setfont(45, 27, "ËÎÌå");
+	setfont(45, 27, "å®‹ä½“");
 	TCHAR numtotal[10];
 	if (bombnum > 99)sprintf_s(numtotal, _T("%d"), bombnum);
 	else if (bombnum > 9)sprintf_s(numtotal, _T("0%d"), bombnum);
 	else if (bombnum >= 0)sprintf_s(numtotal, _T("00%d"), bombnum);
 	outtextxy(20, 15-origin, numtotal);
-	//À×¸öÊı³õÊ¼»¯
+	//é›·ä¸ªæ•°åˆå§‹åŒ–
 
 	chrono::high_resolution_clock::time_point start = chrono::high_resolution_clock::now();
 	thread thdtime(puttime, start, bklen, origin);
-	thdtime.detach();//µ¥¶ÀÔËĞĞµÄ·ÖÀëÏß³Ì
+	thdtime.detach();//å•ç‹¬è¿è¡Œçš„åˆ†ç¦»çº¿ç¨‹
 
 	int currentnumber = bombnum;
 	mistake = false;
@@ -601,52 +601,52 @@ void initgame(int choice) {
 			int j = y_loc / 30;
 
 			if (mes.message == WM_LBUTTONUP) {
-				if (sq[i * linenum + j].ifstat())KAI(&sq[i * linenum + j], rownum, linenum, judgenum);//Î´É¨ É¨µ¥¸ö
-				else if (!sq[i * linenum + j].ifstat())sweep(&sq[i * linenum + j], rownum, linenum, judgenum);//ÒÑÉ¨ ¿ìËÙÉ¨¾Å¹¬¸ñ
+				if (sq[i * linenum + j].ifstat())KAI(&sq[i * linenum + j], rownum, linenum, judgenum);//æœªæ‰« æ‰«å•ä¸ª
+				else if (!sq[i * linenum + j].ifstat())sweep(&sq[i * linenum + j], rownum, linenum, judgenum);//å·²æ‰« å¿«é€Ÿæ‰«ä¹å®«æ ¼
 			}
-			//µ¥»÷×ó¼üÉ¨À×
+			//å•å‡»å·¦é”®æ‰«é›·
 
 			else if (mes.message == WM_RBUTTONUP && !sq[i * linenum + j].ifstat()) {
 
 				if (!sq[i * linenum + j].ifflag() && !sq[i * linenum + j].ifstat()) {
 					sq[i * linenum + j].putflag(judgenum);
 					currentnumber--;
-				}//Ã»±ê¼ÇÒ²Ã»´ò¿ª Ôò±ê¼Ç
+				}//æ²¡æ ‡è®°ä¹Ÿæ²¡æ‰“å¼€ åˆ™æ ‡è®°
 				else if (sq[i * linenum + j].ifflag() && !sq[i * linenum + j].ifstat()) {
 					sq[i * linenum + j].putcover(judgenum);
 					currentnumber++;
-				}//±ê¼ÇÁËÇÒÃ»´ò¿ª Ôò¸´Ô­
+				}//æ ‡è®°äº†ä¸”æ²¡æ‰“å¼€ åˆ™å¤åŸ
 
 				setbkcolor(black);
 				settextcolor(red);
-				setfont(45, 27, "ËÎÌå");
+				setfont(45, 27, "å®‹ä½“");
 				TCHAR numlft[10];
 				if (currentnumber > 99)sprintf_s(numlft, _T("%d"),currentnumber);
 				else if (currentnumber > 9)sprintf_s(numlft, _T("0%d"), currentnumber);
 				else if (currentnumber >= 0)sprintf_s(numlft, _T("00%d"), currentnumber);
 				outtextxy(20, 15 - origin, numlft);
-				//ÊµÊ±¼ÇÂ¼À×¸öÊı
+				//å®æ—¶è®°å½•é›·ä¸ªæ•°
 
 			}
-			//µ¥»÷ÓÒ¼ü±ê¼ÇÀ×
+			//å•å‡»å³é”®æ ‡è®°é›·
 
 			if (mistake) {
 
-				timereset = false;//Í£Ö¹¼ÆÊ±
+				timereset = false;//åœæ­¢è®¡æ—¶
 				for (int k = 2; k > 0; k--) {
 
 					setlinecolor(red);
 					arc(sq[i * linenum + j].getxloc() + 1, sq[i * linenum + j].getyloc() + 1, sq[i * linenum + j].getxloc() + 29, sq[i * linenum + j].getyloc() + 29, 0, 2 * pi);
-					//ºìÉ«¾¯Ê¾
+					//çº¢è‰²è­¦ç¤º
 
 					this_thread::sleep_for(chrono::milliseconds(400));
-					//É«²ÊÍ£Áô ´ïµ½ÉÁË¸Ğ§¹û
+					//è‰²å½©åœç•™ è¾¾åˆ°é—ªçƒæ•ˆæœ
 
 					setlinecolor(white);
 					arc(sq[i * linenum + j].getxloc() + 1, sq->getyloc() + 1, sq[i * linenum + j].getxloc() + 29, sq->getyloc() + 29, 0, 2 * pi);
 					setlinecolor(gray4);
 					arc(sq[i * linenum + j].getxloc() + 1, sq->getyloc() + 1, sq[i * linenum + j].getxloc() + 29, sq->getyloc() + 29, -0.75 * pi, 0.25 * pi);
-					//¿¹¾â³İ
+					//æŠ—é”¯é½¿
 
 					this_thread::sleep_for(chrono::milliseconds(200));
 
@@ -654,13 +654,13 @@ void initgame(int choice) {
 				break;
 
 			}
-			//ÓÎÏ·Ê§°Ü
+			//æ¸¸æˆå¤±è´¥
 			else if (judgenum == 0 && currentnumber == 0) {
-				timereset = false;//Í£Ö¹¼ÆÊ±
+				timereset = false;//åœæ­¢è®¡æ—¶
 				this_thread::sleep_for(chrono::milliseconds(2000));
 				break;
 			}
-			//ÓÎÏ·³É¹¦
+			//æ¸¸æˆæˆåŠŸ
 
 		}
 	}
@@ -669,7 +669,7 @@ void initgame(int choice) {
 	initpick();
 
 }
-//Ò»´ÎÓÎÏ·½ø³Ì
+//ä¸€æ¬¡æ¸¸æˆè¿›ç¨‹
 
 void initpick() {
 
@@ -678,14 +678,14 @@ void initpick() {
 	fillrectangle(0, 0, 600, 250);
 	setbkcolor(gray2);
 	settextcolor(blue);
-	setfont(40, 20, "ËÎÌå");
-	outtextxy(50, 55, "»ù´¡");
-	outtextxy(250, 55, "ÖĞ¼¶");
-	outtextxy(450, 55, "×¨¼Ò");
+	setfont(40, 20, "å®‹ä½“");
+	outtextxy(50, 55, "åŸºç¡€");
+	outtextxy(250, 55, "ä¸­çº§");
+	outtextxy(450, 55, "ä¸“å®¶");
 	settextcolor(red);
-	outtextxy(50, 160, "ÉèÖÃ");
-	outtextxy(250, 160, "³É¼¨");
-	outtextxy(450, 160, "ÍË³ö");
+	outtextxy(50, 160, "è®¾ç½®");
+	outtextxy(250, 160, "æˆç»©");
+	outtextxy(450, 160, "é€€å‡º");
 	setlinestyle(PS_SOLID, 2, PS_JOIN_ROUND);
 	for (int i = 0; i < 2; i++) {
 		setlinecolor(white);
@@ -705,30 +705,30 @@ void initpick() {
 			if (pick.message == WM_LBUTTONUP && pick.x >= 30 && pick.x <= 150 && pick.y >= 45 && pick.y <= 105) {
 				closegraph();
 				initgame(1);
-			}//»ù´¡
+			}//åŸºç¡€
 			else if (pick.message == WM_LBUTTONUP && pick.x >= 230 && pick.x <= 350 && pick.y >= 45 && pick.y <= 105) {
 				closegraph();
 				initgame(2);
-			}//ÖĞ¼¶
+			}//ä¸­çº§
 			else if (pick.message == WM_LBUTTONUP && pick.x >= 430 && pick.x <= 550 && pick.y >= 45 && pick.y <= 105) {
 				closegraph();
 				initgame(3);
-			}//×¨¼Ò
+			}//ä¸“å®¶
 			else if (pick.message == WM_LBUTTONUP && pick.x >= 30 && pick.x <= 150 && pick.y >= 150 && pick.y <= 210) {
 
-			}//ÉèÖÃ
+			}//è®¾ç½®
 			else if (pick.message == WM_LBUTTONUP && pick.x >= 230 && pick.x <= 350 && pick.y >= 150 && pick.y <= 210) {
 
-			}//³É¼¨
+			}//æˆç»©
 			else if (pick.message == WM_LBUTTONUP && pick.x >= 430 && pick.x <= 550 && pick.y >= 150 && pick.y <= 210) {
 				closegraph();
 				break;
-			}//ÍË³ö
+			}//é€€å‡º
 		}
 	}
 
 }
-//Ò»´ÎÑ¡Ôñ½ø³Ì
+//ä¸€æ¬¡é€‰æ‹©è¿›ç¨‹
 
 int main()
 {
@@ -738,12 +738,12 @@ int main()
 	return 0;
 };
 
-/*´ı½â¾ö£º
-* ºÎÊ±Í£Ö¹É¨À×
-* ²»Í¬Ö÷Ìâ±³¾°ÓëÍ¼±ê
-* ÒôĞ§
-* ×Ô¶¯Ä£Ê½
-* µãÀ×Íæ·¨
+/*å¾…è§£å†³ï¼š
+* ä¸åŒä¸»é¢˜èƒŒæ™¯ä¸å›¾æ ‡
+* éŸ³æ•ˆ
+* è‡ªåŠ¨æ¨¡å¼
+* ç‚¹é›·ç©æ³•
 * 
-* Êó±ê¹öÂÖ·Å´óËõĞ¡
+* é¼ æ ‡æ»šè½®æ”¾å¤§ç¼©å°
+
 */
